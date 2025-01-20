@@ -1,101 +1,69 @@
-import Image from "next/image";
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [vercelLink, setVercelLink] = useState("");
+  const [githubLink, setGithubLink] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  return (
+    <main className="text-center p-6">
+      <h1 className="text-4xl">CS391 File Generator</h1>
+      <h2 className="text-xl">
+        Submit your Vercel and GitHub links here to create a text file to submit
+        on Gradescope.
+      </h2>
+      <div className="flex justify-center">
+        <p className="text-sm max-w-[45vw]">
+          A note on this tool: This tool checks if your links are publicly
+          accessible and are from Vercel and GitHub, respectively. This tool
+          does not check the correctness of your project nor if you have
+          submitted the correct GitHub repository. It is up to you to make sure
+          your project works and the links are for the correct resource. If you
+          believe there is a bug with this tool, please report it to the course
+          staff on Piazza.
+        </p>
+      </div>
+      <div className="flex justify-center p-4">
+        <form
+          className="flex flex-col min-w-[45vw] items-center"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setError("");
+            const endpoint = `/generate-file?vercelLink=${encodeURIComponent(vercelLink)}&githubLink=${encodeURIComponent(githubLink)}&t=${new Date().getTime()}`;
+            fetch(endpoint).then((res) =>
+              res.ok
+                ? router.push(endpoint)
+                : res.text().then((errorMsg) => setError(errorMsg)),
+            );
+          }}
+        >
+          <div className="w-full text-start m-1">
+            <p className="text-sm">Vercel Link</p>
+            <input
+              placeholder="Vercel Link"
+              className="w-full p-1 border-2"
+              value={vercelLink}
+              onChange={(e) => setVercelLink(e.target.value)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          </div>
+          <div className="w-full text-start m-1">
+            <p className="text-sm">GitHub Link</p>
+            <input
+              placeholder="GitHub Link"
+              className="w-full p-1 border-2"
+              value={githubLink}
+              onChange={(e) => setGithubLink(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="border-2 rounded-xl py-2 px-4 m-1">
+            Submit
+          </button>
+          <p className="text-red-600">{error}</p>
+        </form>
+      </div>
+    </main>
   );
 }
