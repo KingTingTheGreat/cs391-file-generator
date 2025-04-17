@@ -45,6 +45,7 @@ export default function Home() {
           <div className="w-full text-start m-1">
             <p className="text-sm">Name</p>
             <input
+              type="name"
               placeholder="Name"
               className="w-full p-1 border-2"
               value={name}
@@ -54,6 +55,7 @@ export default function Home() {
           <div className="w-full text-start m-1">
             <p className="text-sm">BU Email</p>
             <input
+              type="email"
               placeholder="BU Email"
               className="w-full p-1 border-2"
               value={email}
@@ -63,6 +65,7 @@ export default function Home() {
           <div className="w-full text-start m-1">
             <p className="text-sm">Vercel Link</p>
             <input
+              type="url"
               placeholder="Vercel Link"
               className="w-full p-1 border-2"
               value={vercelLink}
@@ -72,6 +75,7 @@ export default function Home() {
           <div className="w-full text-start m-1">
             <p className="text-sm">GitHub Link</p>
             <input
+              type="url"
               placeholder="GitHub Link"
               className="w-full p-1 border-2"
               value={githubLink}
