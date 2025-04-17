@@ -28,12 +28,30 @@ function currentESTTime(): string {
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
+  const name = decodeURIComponent(
+    req.nextUrl.searchParams.get("name") as string,
+  );
+  const email = decodeURIComponent(
+    req.nextUrl.searchParams.get("email") as string,
+  );
   const vercelLink = decodeURIComponent(
     req.nextUrl.searchParams.get("vercelLink") as string,
   );
   const githubLink = decodeURIComponent(
     req.nextUrl.searchParams.get("githubLink") as string,
   );
+
+  // check name
+  if (name === "") {
+    return new NextResponse("MISSING NAME", { status: 400 });
+  }
+
+  // check email
+  if (email === "") {
+    return new NextResponse("MISSING EMAIL", { status: 400 });
+  } else if (!email.endsWith("@bu.edu")) {
+    return new NextResponse("EMAIL IS NOT FROM BU", { status: 400 });
+  }
 
   // check vercel link
   if (vercelLink === "") {
@@ -62,7 +80,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   headers.set("Content-Type", "text/plain");
 
   // Return the file with the content "hello"
-  return new NextResponse(`${vercelLink}\n${githubLink}`, {
+  return new NextResponse(`${name}\n${email}\n${vercelLink}\n${githubLink}`, {
     status: 200,
     headers,
   });

@@ -3,6 +3,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Home() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [vercelLink, setVercelLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
   const [error, setError] = useState("");
@@ -32,7 +34,7 @@ export default function Home() {
           onSubmit={(e) => {
             e.preventDefault();
             setError("");
-            const endpoint = `/generate-file?vercelLink=${encodeURIComponent(vercelLink)}&githubLink=${encodeURIComponent(githubLink)}&t=${new Date().getTime()}`;
+            const endpoint = `/generate-file?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&vercelLink=${encodeURIComponent(vercelLink)}&githubLink=${encodeURIComponent(githubLink)}&t=${new Date().getTime()}`;
             fetch(endpoint).then((res) =>
               res.ok
                 ? router.push(endpoint)
@@ -40,6 +42,24 @@ export default function Home() {
             );
           }}
         >
+          <div className="w-full text-start m-1">
+            <p className="text-sm">Name</p>
+            <input
+              placeholder="Name"
+              className="w-full p-1 border-2"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="w-full text-start m-1">
+            <p className="text-sm">BU Email</p>
+            <input
+              placeholder="BU Email"
+              className="w-full p-1 border-2"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
           <div className="w-full text-start m-1">
             <p className="text-sm">Vercel Link</p>
             <input
